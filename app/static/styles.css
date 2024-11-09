@@ -209,12 +209,37 @@ button:active, .button-link:active {
 
 .flash-message .error {
     color: #ef4444; /* Red color */
+    width: 360px;
     background-color: #fdecea;
     border: 1px solid #e63946;
     padding: 10px;
     border-radius: 5px;
     margin: 5px 0;
     font-weight: bold;
+}
+
+/* Style for the exit button */
+.exit-button {
+    display: block;
+    width: 80px;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #ef4444; /* Red color for exit */
+    border-radius: 6px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.exit-button:hover {
+    background-color: #dc2626; /* Darker red on hover */
+    transform: scale(1.03);
+}
+
+.exit-button:active {
+    transform: scale(0.98);
 }
 
 

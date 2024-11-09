@@ -22,6 +22,10 @@ def load_questions():
     with open("questions.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
+@app.route('/exit')
+def exit_app():
+    """Display the exit page"""
+    return render_template('exit.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():

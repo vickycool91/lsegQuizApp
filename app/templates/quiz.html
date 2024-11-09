@@ -7,20 +7,41 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>LSEG Quiz</h1>
-    <form method="POST" action="{{ url_for('submit') }}">
-        {% for question in questions %}
-        <div>
-            <h3>{{ question['question'] }}</h3>
-            {% for option in question['options'] %}
-            <label>
-                <input type="radio" name="question_{{ question['id'] }}" value="{{ option['key'] }}">
-                {{ option['text'] }}
-            </label><br>
+    <div class="quiz-container">
+        <h1 class="quiz-title">LSEG Quiz</h1>
+
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <div class="flash-message">
+                    <ul>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('submit') }}">
+            {% for question in questions %}
+            <div class="question-block">
+                <!-- Adding question number using loop.index -->
+                <h3>{{ loop.index }}. {{ question['question'] }}</h3>
+                {% for option in question['options'] %}
+                <label class="option-label">
+                    <input type="radio" name="question_{{ question['id'] }}" value="{{ option['key'] }}"
+                        {% if session.get('saved_answers') and session['saved_answers'].get('question_' ~ question['id']) == option['key'] %}
+                            checked
+                        {% endif %}
+                    >
+                    {{ option['text'] }}
+                </label><br>
+                {% endfor %}
+            </div>
             {% endfor %}
-        </div>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
 </body>
 </html>

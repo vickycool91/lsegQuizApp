@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSEG Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>LSEG Quiz</h1>
+    <form method="POST" action="{{ url_for('submit') }}">
+        {% for question in questions %}
+        <div>
+            <h3>{{ question['question'] }}</h3>
+            {% for option in question['options'] %}
+            <label>
+                <input type="radio" name="question_{{ question['id'] }}" value="{{ option['key'] }}">
+                {{ option['text'] }}
+            </label><br>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

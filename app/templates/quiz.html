@@ -3,47 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSEG Quiz</title>
+    <title>Quiz Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="quiz-container">
-        <h1 class="quiz-title">LSEG Quiz</h1>
+    <div class="results-container">
+        <h1 class="results-title">Quiz Results</h1>
 
-        <!-- Display Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                <div class="flash-message">
-                    <ul>
-                        {% for category, message in messages %}
-                            <li class="{{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+        <div class="responses">
+            {% for result in results %}
+            <h4>{{ loop.index }}. {{ result['question'] }}</h4>
+            <p>Your answer: {{ result['user_answer'] }} {% if result['is_correct'] %}<span class="correct">✔️</span>{% else %}<span class="incorrect">❌</span>{% endif %}</p>
+            {% if not result['is_correct'] %}
+            <p>Correct answer: {{ result['correct_answer'] }}</p>
             {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="{{ url_for('submit') }}">
-            {% for question in questions %}
-            <div class="question-block">
-                <!-- Adding question number using loop.index -->
-                <h3>{{ loop.index }}. {{ question['question'] }}</h3>
-                {% for option in question['options'] %}
-                <label class="option-label">
-                    <input type="radio" name="question_{{ question['id'] }}" value="{{ option['key'] }}"
-                        {% if session.get('saved_answers') and session['saved_answers'].get('question_' ~ question['id']) == option['key'] %}
-                            checked
-                        {% endif %}
-                    >
-                    {{ option['text'] }}
-                </label><br>
-                {% endfor %}
-            </div>
+            <hr>
             {% endfor %}
-            <button type="submit" class="submit-button">Submit</button>
-        </form>
-         <!-- Add Exit Button -->
-        <a href="{{ url_for('exit_app') }}" class="exit-button">Exit</a>
+        </div>
+
+        <div class="score-restart">
+            <div class="score-container">
+                <h2>Your Score</h2>
+                <p class="score">{{ score }}/{{ total }}</p>
+            </div>
+            <a href="{{ url_for('quiz') }}" class="button-link">Restart Quiz</a>
+        </div>
     </div>
 </body>
 </html>

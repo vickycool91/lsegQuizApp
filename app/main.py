@@ -1,14 +1,21 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import json
-
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
+
 
 @app.route('/')
 def quiz():
     """Display the quiz form"""
     questions = load_questions()
+
+    # Clear the saved answers from the session
+    session.pop('saved_answers', None)
+
     return render_template('quiz.html', questions=questions)
+
 
 def load_questions():
     """Load questions from questions.json"""
@@ -30,9 +37,10 @@ def submit():
         # Get user's response for the question
         user_answer_key = request.form.get(f'question_{question_id}')
 
-        # Check if the answer is None
+        # Check if the answer is None (i.e., no answer was selected)
         if user_answer_key is None:
-            flash("Please answer all questions before submitting.")
+            flash("Please answer all questions before submitting.", "error")
+
             return redirect(url_for('quiz'))
 
         # Get the correct answer key from json
@@ -72,4 +80,4 @@ def submit():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=8082)
+    app.run(debug=True, host='0.0.0.0', port=8082)

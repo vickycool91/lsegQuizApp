@@ -7,23 +7,27 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Quiz Results</h1>
-    <div class="score-container">
-       <h2>Your Score</h2>
-       <p class="score">{{ score }}/{{ total }}</p>
-    </div>
+    <div class="results-container">
+        <h1 class="results-title">Quiz Results</h1>
 
-    <div>
-        {% for result in results %}
-        <h4>{{ loop.index }}. {{ result['question'] }}</h4>
-        <p>Your answer: {{ result['user_answer'] }} {% if result['is_correct'] %}✔️{% else %}❌{% endif %}</p>
-        {% if not result['is_correct'] %}
-        <p>Correct answer: {{ result['correct_answer'] }}</p>
-        {% endif %}
-        <hr>
-        {% endfor %}
-    </div>
-    <a href="{{ url_for('quiz') }}" class="button-link">Restart Quiz</a>
+        <div class="responses">
+            {% for result in results %}
+            <h4>{{ loop.index }}. {{ result['question'] }}</h4>
+            <p>Your answer: {{ result['user_answer'] }} {% if result['is_correct'] %}<span class="correct">✔️</span>{% else %}<span class="incorrect">❌</span>{% endif %}</p>
+            {% if not result['is_correct'] %}
+            <p>Correct answer: {{ result['correct_answer'] }}</p>
+            {% endif %}
+            <hr>
+            {% endfor %}
+        </div>
 
+        <div class="score-restart">
+            <div class="score-container">
+                <h2>Your Score</h2>
+                <p class="score">{{ score }}/{{ total }}</p>
+            </div>
+            <a href="{{ url_for('quiz') }}" class="button-link">Restart Quiz</a>
+        </div>
+    </div>
 </body>
 </html>
